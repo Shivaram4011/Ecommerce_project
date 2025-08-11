@@ -1,0 +1,25 @@
+{% extends "store/base.html" %}
+{% block content %}
+<h3>Dry Fruits</h3>
+<div class="row">
+  {% for p in products %}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <img src="{{ p.image.url }}" class="card-img-top" style="height:200px;object-fit:cover;">
+      <div class="card-body">
+        <h5 class="card-title">{{ p.name }}</h5>
+        <p>Price: Rs {{ p.price_per_kg }} / kg</p>
+        <form method="post" action="{% url 'add_to_cart' %}">
+          {% csrf_token %}
+          <input type="hidden" name="product" value="{{ p.id }}">
+          <div class="input-group mb-2">
+            <input type="number" name="weight_grams" min="1" class="form-control" placeholder="grams" required>
+            <button class="btn btn-success" type="submit">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

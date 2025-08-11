@@ -1,0 +1,25 @@
+{% extends "store/base.html" %}
+{% block content %}
+<h3>Your Cart</h3>
+{% if items %}
+<table class="table">
+  <thead><tr><th>Product</th><th>Weight (g)</th><th>Price (Rs)</th><th>Action</th></tr></thead>
+  <tbody>
+    {% for it in items %}
+    <tr>
+      <td>{{ it.product.name }}</td>
+      <td>{{ it.weight_grams }}</td>
+      <td>{{ it.price|floatformat:2 }}</td>
+      <td>
+        <a href="{% url 'remove_from_cart' it.product.id forloop.counter0 %}" class="btn btn-sm btn-danger">remove</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="fw-bold">Total: Rs {{ total|floatformat:2 }}</p>
+<a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+{% else %}
+<p>Your cart is empty. <a href="{% url 'product_list' %}">Shop now</a></p>
+{% endif %}
+{% endblock %}

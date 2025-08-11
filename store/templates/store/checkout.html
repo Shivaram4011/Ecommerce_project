@@ -1,0 +1,22 @@
+{% extends "store/base.html" %}
+{% block content %}
+<h3>Checkout</h3>
+<table class="table">
+  <thead><tr><th>Product</th><th>Weight (g)</th><th>Price (Rs)</th></tr></thead>
+  <tbody>
+    {% for it in items %}
+    <tr>
+      <td>{{ it.product.name }}</td>
+      <td>{{ it.weight_grams }}</td>
+      <td>{{ it.price|floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="fw-bold">Total: Rs {{ total|floatformat:2 }}</p>
+
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-success" type="submit">Pay / Place Order</button>
+</form>
+{% endblock %}

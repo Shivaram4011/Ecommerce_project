@@ -1,0 +1,33 @@
+{% extends "store/base.html" %}
+{% block content %}
+<h3>Receipt — Order #{{ order.id }}</h3>
+
+<p>Customer: {{ order.customer.get_full_name|default:order.customer.username }} / {{ order.customer.email }}</p>
+<p>Date: {{ order.created_at }}</p>
+<p>Payment: {{ order.payment_method }} — {% if order.payment_status %}<span class="text-success">Paid</span>{% else %}<span class="text-warning">Pending</span>{% endif %}</p>
+
+<table class="table">
+  <thead><tr><th>Product</th><th>Weight (g)</th><th>Price (Rs)</th></tr></thead>
+  <tbody>
+    {% for item in order.items.all %}
+    <tr>
+      <td>{{ item.product.name }}</td>
+      <td>{{ item.weight_grams }}</td>
+      <td>{{ item.price|floatformat:2 }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="fw-bold">Total: Rs {{ order.total_price|floatformat:2 }}</p>
+
+{% if order.qr_code %}
+  <h5>Scan QR to pay</h5>
+  <img src="{{ order.qr_code.url }}" alt="QR code" style="max-width:250px;">
+{% endif %}
+
+{% if order.receipt_pdf %}
+  <a href="{{ order.receipt_pdf.url }}" class="btn btn-primary" download>Download Receipt (PDF)</a>
+{% endif %}
+
+<a href="{% url 'product_list' %}" class="btn btn-secondary">Back to shop</a>
+{% endblock %}
