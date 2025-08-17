@@ -24,7 +24,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('product_list')
+            return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'store/register.html', {'form': form})
@@ -47,7 +47,7 @@ def logout_view(request):
 
 # --- Cart helpers (session-based) ---
 def _cart_session(request):
-    return request.session.setdefault('cart', {})  # dict: product_id -> weight_grams (int) or list of items
+    return request.session.setdefault('cart', {})  
 
 @login_required
 def product_list(request):
@@ -85,7 +85,7 @@ def cart_view(request):
 
 @login_required
 def remove_from_cart(request, product_id, index):
-    # index indicates which instance of that product to remove
+    
     cart = _cart_session(request)
     key = str(product_id)
     if key in cart:
